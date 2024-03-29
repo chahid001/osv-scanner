@@ -16,12 +16,13 @@
 ## 🛠️ Usage
 
 ```bash
-osv-scanner scan --html --project="project-name" -L $(pwd)/pubspec.lock
+osv-scanner scan --html --project="project-name" --pub -L $(pwd)/pubspec.lock
 ```
 
 ### **Mandatory**:
 - `-L`: Specify the path to the package lockfile.
 - `--html`: Enable HTML report generation.
+- `--pub`: Specifyin the Ecosystem.
 
 ### **Optional**:
 - `--project`: Define a project name for the report.
@@ -67,6 +68,8 @@ OPTIONS:
    --failOnCVSS value                                               add CVSS rule for failing (developed by chahid001) (default: -1)
    --project value                                                  add project name (developed by chahid001) (default: "false")
    --name value                                                     add report name (developed by chahid001) (default: "false")
+   --pub value                                                      scan & generate an HTML report for pub ecosystem (developed by chahid001) (default: false)
+   --npm value                                                      scan & generate an HTML report for npm ecosystem (developed by chahid001) (default: false)
    --help, -h                                                       show help
 
 ```
