@@ -153,6 +153,15 @@ func Command(stdout, stderr io.Writer, r *reporter.Reporter) *cli.Command {
 				Usage: "add report name (developed by chahid001)",
 				Value: "false",
 			},
+			&cli.BoolFlag{
+				Name:  "pub",
+				Usage: "scan & generate an HTML report for pubsec ecosystem (developed by chahid001)",
+			},
+			&cli.BoolFlag{
+				Name:  "npm",
+				Usage: "scan & generate an HTML report for npm ecosystem (developed by chahid001)",
+			},
+
 		},
 		ArgsUsage: "[directory1 directory2...]",
 		Action: func(c *cli.Context) error {
@@ -273,8 +282,24 @@ func action(context *cli.Context, stdout, stderr io.Writer) (reporter.Reporter, 
 				return r, nil
 			}
 		}
-		report := reporter.NewJSONReporter(stdout, stderr, reporter.VerbosityLevel(reporter.InfoLevel), failOn, project_n, name_rp)
-		report.PrintResult(&vulnResult)
+		if context.Bool("npm") {
+			if context.Bool("pub") {
+				fmt.Print("Error, multiple ecosystem")
+				os.Exit(1)
+			}
+			fmt.Print("hello npm")
+			report := reporter.NewJSONReporter(stdout, stderr, reporter.VerbosityLevel(reporter.InfoLevel), failOn, project_n, name_rp, "npm")
+			report.PrintResult(&vulnResult)
+		}
+		if context.Bool("pub") {
+			if context.Bool("npm") {
+				fmt.Print("Error, multiple ecosystem")
+				os.Exit(1)
+			}
+			fmt.Print("hello pub")
+			report := reporter.NewJSONReporter(stdout, stderr, reporter.VerbosityLevel(reporter.InfoLevel), failOn, project_n, name_rp, "pub")
+			report.PrintResult(&vulnResult)
+		}		
 	}
 
     if err != nil && !errors.Is(err, osvscanner.VulnerabilitiesFoundErr) {

@@ -16,7 +16,7 @@ func Format() []string {
 func New(format string, stdout, stderr io.Writer, level VerbosityLevel, terminalWidth int) (Reporter, error) {
 	switch format {
 	case "json":
-		return NewJSONReporter(stdout, stderr, level, 0, "", ""), nil
+		return NewJSONReporter(stdout, stderr, level, 0, "", "", ""), nil
 	case "table":
 		return NewTableReporter(stdout, stderr, level, false, terminalWidth), nil
 	case "markdown":

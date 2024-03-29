@@ -17,9 +17,10 @@ type JSONReporter struct {
 	failRule   int
 	project    string
 	name_rp    string
+	eco		   string
 }
 
-func NewJSONReporter(stdout io.Writer, stderr io.Writer, level VerbosityLevel, failRule int, project string, name_rp string) *JSONReporter {
+func NewJSONReporter(stdout io.Writer, stderr io.Writer, level VerbosityLevel, failRule int, project string, name_rp string, eco string) *JSONReporter {
 	return &JSONReporter{
 		stdout:     stdout,
 		stderr:     stderr,
@@ -28,6 +29,7 @@ func NewJSONReporter(stdout io.Writer, stderr io.Writer, level VerbosityLevel, f
 		failRule: failRule,
 		project: project,
 		name_rp: name_rp,
+		eco:	 eco,
 	}
 }
 
@@ -61,10 +63,13 @@ func (r *JSONReporter) Verbosef(format string, a ...any) {
 func (r *JSONReporter) PrintResult(vulnResult *models.VulnerabilityResults) (error) {
 	
 
-	in, nil := output.PrintJSONResults(vulnResult, r.stdout)
+	output.PrintJSONResults(vulnResult, r.stdout)
 
-	parse_result(in, r.project, r.name_rp, r.failRule)
-
+	if (r.eco == "pub") {
+		parse_result_pub("/osv-scanner/reports/osv-scan-report.json", r.project, r.name_rp, r.failRule)
+	} else if (r.eco == "npm") {
+		parse_result_npm("/osv-scanner/reports/osv-scan-report.json", r.project, r.name_rp, r.failRule)
+	}
 	return nil
 }
 

@@ -38,8 +38,20 @@ class Vulnerability:
                 break
 
 
-json_data = sys.argv[1]
-data = json.loads(json_data)
+json_data_file = sys.argv[1]  
+
+try:
+    with open(json_data_file, "r") as f:
+        data = json.load(f)
+except FileNotFoundError:
+    print("Error: JSON file not found!", file=sys.stderr)
+    sys.exit(1)
+except json.JSONDecodeError as e:
+    print("Error: Invalid JSON format!", file=sys.stderr)
+    print(f"Details: {e}", file=sys.stderr)
+    sys.exit(1)
+
+    
 organized_packages = []
 
 vun_nb = 0
@@ -210,7 +222,7 @@ cv = float(sys.argv[4])
 date_time = now.strftime("%a, %d %b %Y  %H:%M:%S")
 
 html_output += f"<h2>Project: {projct_name}</h2>"
-html_output += f"<div class='info'><p>OSV Scanner Version: v1.0 custom build (based on open-source version)</p>"
+html_output += f"<div class='info'><p>OSV Scanner Version: v1.2 custom build (based on open-source version)</p>"
 html_output += f"<p>Report Generated On: {date_time}</p>"
 html_output += f"<p>Vulnerable Packages: {vun_pk}</p>"
 html_output += f"<p>Vulnerabilities Found: {vun_nb}</p></div>"
@@ -237,7 +249,7 @@ html_output += "</tbody></table>"
 current_pack = ""
 
 
-file_name = "/workspace/" + sys.argv[3]
+file_name = "/osv-scanner/reports/" + sys.argv[3]
 
 for index, package in enumerate(organized_packages):
     html_output += f"<div class='vulnerability' id='details_{package.name}'>"
